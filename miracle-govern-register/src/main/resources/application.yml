@@ -1,0 +1,19 @@
+server:
+  port: ${PROT:10002}
+spring:
+  application:
+    name: miracle-govern-register
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 30
+    service_url:
+        defaultZone: ${EUREKA_SERVER:http://127.0.0.1:10001/eureka,http://127.0.0.1:10002/eureka}
+  server:
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 30000
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+

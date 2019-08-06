@@ -7,6 +7,9 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,8 +20,11 @@ import javax.servlet.http.HttpServletResponse;
  * @author Leon
  * @version 2019/7/27 22:32
  */
-//@Component
+@Component
 public class LoginFilter extends ZuulFilter {
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public String filterType() {
@@ -32,25 +38,24 @@ public class LoginFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        // 返回true表示要执行此过虑器
+        // TODO: dynamic filter url
         return true;
     }
 
     @Override
     public Object run() throws ZuulException {
         HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
-        // 从header中取jwt
+        // Get jwt authentication from header
         String authorization = getJwtFromHeader(request);
         if (StringUtils.isBlank(authorization)) {
             accessDenied();
             return null;
         }
-        // TODO
-        /*long expire = authService.getExpire(token);
-        if (expire < 0) {
+        Boolean hasKey = stringRedisTemplate.hasKey("user_token:" + authorization);
+        if (!hasKey) {
             accessDenied();
             return null;
-        }*/
+        }
         return null;
     }
 
@@ -64,7 +69,7 @@ public class LoginFilter extends ZuulFilter {
         response.setContentType("application/json;charset=utf-8");
     }
 
-    public String getJwtFromHeader(HttpServletRequest request) {
+    private String getJwtFromHeader(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
         if (StringUtils.isBlank(authorization)) {
             return null;

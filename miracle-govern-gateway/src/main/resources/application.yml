@@ -53,13 +53,5 @@ zuul:
       serviceId: miracle-service-manage-order #指定服务id，从Eureka中找到服务的ip和端口
       strip-prefix: false
       sensitiveHeaders:
-security:
-  basic:
-    enabled: false
-  oauth2:
-    client:
-      access-token-uri: http://loacalhost:14001/auth/oauth/token #令牌端点
-      user-authorization-uri: http://loacalhost:14001/auth/oauth/authorize #授权端点
-      client-id: client
-      client-secret: secret
+
 

@@ -1,5 +1,7 @@
 package cn.miracle.service.manage.auth.service;
 
+import lombok.Data;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -11,12 +13,14 @@ import java.util.Collection;
  * @author Leon
  * @version 2019/8/4 18:34
  */
+@Data
+@ToString
 public class JwtUser extends User {
 
     /**
      * id
      */
-    private String id;
+    private Long id;
 
     /**
      * 登录名

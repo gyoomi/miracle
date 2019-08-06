@@ -12,6 +12,24 @@
     <artifactId>miracle-service-manage-auth</artifactId>
 
     <dependencies>
+        <!-- model的依赖 -->
+        <dependency>
+            <groupId>cn.miracle</groupId>
+            <artifactId>miracle-framework-model</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- common的依赖 -->
+        <dependency>
+            <groupId>cn.miracle</groupId>
+            <artifactId>miracle-framework-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- util的依赖 -->
+        <dependency>
+            <groupId>cn.miracle</groupId>
+            <artifactId>miracle-framework-util</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

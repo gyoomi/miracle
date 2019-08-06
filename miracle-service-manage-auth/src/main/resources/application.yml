@@ -4,10 +4,10 @@ server:
     context-path: /auth
 spring:
   application:
-    name: xc-service-manage-auth
+    name: miralce-service-manage-auth
   redis:
     database: 0
-    host: 192.168.0.117
+    host: 127.0.0.1
     port: 6379
     password:
     jedis:
@@ -16,7 +16,7 @@ spring:
         max-idle: 8
         min-idle: 0
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/xc_user?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
     username: root
     password: root
@@ -35,6 +35,7 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 20 #开启poolPreparedStatements后生效
     filters: stat,wall,log4j #配置扩展插件，常用的插件有=>stat:监控统计  log4j:日志  wall:防御sql注入
     connectionProperties: 'druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000' #通过connectProperties属性来打开mergeSql功能;慢SQL记录
+# ---eureka---
 eureka:
   client:
     registerWithEureka: true #服务注册开关
@@ -45,7 +46,13 @@ eureka:
     prefer-ip-address:  true  #将自己的ip地址注册到Eureka服务中
     ip-address: ${IP_ADDRESS:127.0.0.1}
     instance-id: ${spring.application.name}:${server.port} #指定实例id
-
+# ---encrypt---
+encrypt:
+  key-store:
+    location: classpath:/xc.keystore
+    secret: xuechengkeystore
+    alias: xckey
+    password: xuecheng
 
 
 

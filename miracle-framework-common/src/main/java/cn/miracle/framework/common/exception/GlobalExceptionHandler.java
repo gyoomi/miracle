@@ -25,6 +25,7 @@ public class GlobalExceptionHandler {
      * 定义map，配置异常类型所对应的错误代码
      */
     private static ImmutableMap<Class<? extends Throwable>, ResultCode> exceptions;
+
     /**
      * 定义map的builder对象，去构建ImmutableMap
      */
@@ -57,7 +58,7 @@ public class GlobalExceptionHandler {
     }
 
     static {
-        //定义异常类型所对应的错误代码
+        // 定义异常类型所对应的错误代码
         builder.put(HttpMessageNotReadableException.class, CommonCode.INVALID_PARAM);
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -22,6 +21,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.security.KeyPair;
 
@@ -38,7 +38,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private DataSource dataSource;
 
-    @Qualifier(value = "keyProp")
+    @Resource(name = "keyProp")
     private KeyProperties keyProperties;
 
     @Autowired
@@ -56,7 +56,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private TokenStore tokenStore;
 
-    @Autowired
+    @Qualifier("UserDetailServiceImpl")
     private UserDetailsService userDetailsService;
 
     @Autowired
@@ -65,6 +65,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public ClientDetailsService clientDetailsService() {
         return new JdbcClientDetailsService(dataSource);
+    }
+
+    @Bean(value = "keyProp")
+    public KeyProperties keyProperties() {
+        return new KeyProperties();
     }
 
     @Bean
@@ -83,14 +88,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return new JwtTokenStore(jwtAccessTokenConverter);
     }
 
-    @Bean(value = "keyProp")
-    public KeyProperties keyProperties() {
-        return new KeyProperties();
-    }
-
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.jdbc(dataSource).clients(clientDetailsService);
+        clients.jdbc(dataSource).clients(clientDetailsService());
     }
 
     @Override

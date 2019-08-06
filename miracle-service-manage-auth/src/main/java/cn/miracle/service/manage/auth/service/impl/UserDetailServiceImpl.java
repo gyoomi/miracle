@@ -23,7 +23,7 @@ import java.util.List;
  * @author Leon
  * @version 2019/8/4 18:37
  */
-@Service
+@Service("UserDetailServiceImpl")
 public class UserDetailServiceImpl implements UserDetailsService {
 
     @Autowired
@@ -48,7 +48,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         cn.miracle.framework.model.user.User curUser = new cn.miracle.framework.model.user.User();
         curUser.setId(11111L);
         curUser.setLoginName("admin");
-        curUser.setPassword(passwordEncoder.encode("admin"));
+        curUser.setPassword(passwordEncoder.encode("123"));
         if (curUser == null) {
             return null;
         }

@@ -17,11 +17,19 @@ import java.util.Map;
 @RequestMapping(value = "/manage/user/test")
 public class TestController {
 
-    @GetMapping(value = "/get")
-    public Map test() {
+    @GetMapping(value = "/test1")
+    public Map test1() {
         return new HashMap(){{
             put("name", "张三");
             put("age", 22);
+        }};
+    }
+
+    @GetMapping(value = "/test2")
+    public Map test2() {
+        return new HashMap(){{
+            put("name", "张三22222222");
+            put("age", 2333333);
         }};
     }
 }

@@ -1,5 +1,5 @@
 server:
-  port: ${PROT:10002}
+  port: ${PROT:10001}
 spring:
   application:
     name: miracle-govern-register

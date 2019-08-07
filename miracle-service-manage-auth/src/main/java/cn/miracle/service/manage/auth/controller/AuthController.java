@@ -3,6 +3,7 @@ package cn.miracle.service.manage.auth.controller;
 import cn.miracle.framework.common.exception.ExceptionBuilder;
 import cn.miracle.framework.common.model.response.CommonCode;
 import cn.miracle.framework.model.auth.AuthToken;
+import cn.miracle.service.manage.auth.feign.TestFeignClient;
 import cn.miracle.service.manage.auth.properties.AuthProperties;
 import cn.miracle.service.manage.auth.service.AuthService;
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -29,6 +29,9 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private TestFeignClient testFeignClient;
+
     /**
      * 登录
      *
@@ -45,11 +48,13 @@ public class AuthController {
         return token;
     }
 
-    @GetMapping("/test")
-    public Map test() {
-        return new HashMap(){{
-            put("name", "沾伞");
-            put("age", 22);
-        }};
+    @GetMapping("/test1")
+    public Map test1() {
+        return testFeignClient.test1();
+    }
+
+    @GetMapping("/test2")
+    public Map test2() {
+        return testFeignClient.test2();
     }
 }

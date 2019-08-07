@@ -4,7 +4,7 @@ server:
     context-path: /auth
 spring:
   application:
-    name: miracle_service-manage-auth
+    name: miracle-service-manage-auth
   redis:
     database: 0
     host: 127.0.0.1
@@ -46,6 +46,17 @@ eureka:
     prefer-ip-address:  true  #将自己的ip地址注册到Eureka服务中
     ip-address: ${IP_ADDRESS:127.0.0.1}
     instance-id: ${spring.application.name}:${server.port} #指定实例id
+# ---feign---
+feign:
+  compression:
+    request:
+      enabled: true #开启请求压缩
+      mime-type: text/html,application/xml,application/json #设置压缩的数据类型
+      min-request-size: 2048 #设置触发压缩的大小下限
+    response:
+      enabled: true #开启响应压缩
+  hystrix:
+    enabled: true #开启Feign的熔断功能,(fallback is fruitful)
 # ---encrypt---
 encrypt:
   key-store:

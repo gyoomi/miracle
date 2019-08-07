@@ -69,6 +69,10 @@ auth:
   tokenValiditySeconds: 1200  #token存储到redis的过期时间
   clientId: XcWebApp
   clientSecret: XcWebApp
-
+# ---Miracle custom configuration---
+miracle:
+  work:
+    workerId: 1
+    dataCenterId: 2
 
 

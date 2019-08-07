@@ -2,8 +2,11 @@ package cn.miracle.service.manage.auth.service.impl;
 
 import cn.miracle.framework.common.constant.ServiceApplicationList;
 import cn.miracle.framework.common.exception.ExceptionBuilder;
+import cn.miracle.framework.common.util.IdWorker;
 import cn.miracle.framework.model.auth.AuthCode;
 import cn.miracle.framework.model.auth.AuthToken;
+import cn.miracle.framework.model.user.User;
+import cn.miracle.service.manage.auth.dao.UserRepository;
 import cn.miracle.service.manage.auth.properties.AuthProperties;
 import cn.miracle.service.manage.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.LinkedMultiValueMap;
@@ -47,6 +51,15 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private AuthProperties authProperties;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private IdWorker idWorker;
+
+    @Autowired
+    private UserRepository userRepository;
+
     /**
      * {@inheritDoc}
      *
@@ -68,6 +81,21 @@ public class AuthServiceImpl implements AuthService {
             ExceptionBuilder.build(AuthCode.AUTH_SAVE_TOKEN_ERROR);
         }
         return token;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param user
+     * @return
+     */
+    @Override
+    public User register(User user) {
+        user.setId(idWorker.nextId());
+        String rawPassword = user.getPassword();
+        user.setPassword(bCryptPasswordEncoder.encode(rawPassword));
+        userRepository.save(user);
+        return user;
     }
 
     /**

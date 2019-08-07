@@ -6,7 +6,6 @@ import cn.miracle.framework.common.util.IdWorker;
 import cn.miracle.framework.model.auth.AuthCode;
 import cn.miracle.framework.model.auth.AuthToken;
 import cn.miracle.framework.model.user.User;
-import cn.miracle.service.manage.auth.dao.UserRepository;
 import cn.miracle.service.manage.auth.properties.AuthProperties;
 import cn.miracle.service.manage.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
@@ -58,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
     private IdWorker idWorker;
 
     @Autowired
-    private UserRepository userRepository;
+    private JdbcTemplate jdbc;
 
     /**
      * {@inheritDoc}
@@ -94,7 +94,8 @@ public class AuthServiceImpl implements AuthService {
         user.setId(idWorker.nextId());
         String rawPassword = user.getPassword();
         user.setPassword(bCryptPasswordEncoder.encode(rawPassword));
-        userRepository.save(user);
+        String sql = " INSERT INTO user (id, login_name, password) VALUES (?, ?, ?) ";
+        jdbc.update(sql, user.getId(), user.getLoginName(), user.getPassword());
         return user;
     }
 

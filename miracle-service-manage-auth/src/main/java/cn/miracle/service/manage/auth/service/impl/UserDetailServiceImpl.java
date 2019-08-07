@@ -1,6 +1,10 @@
 package cn.miracle.service.manage.auth.service.impl;
 
+import cn.miracle.framework.model.user.Menu;
+import cn.miracle.framework.model.user.ext.UserExt;
 import cn.miracle.service.manage.auth.service.JwtUser;
+import cn.miracle.service.manage.auth.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -32,6 +36,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -45,22 +52,20 @@ public class UserDetailServiceImpl implements UserDetailsService {
         if (username == null) {
             return null;
         }
-        cn.miracle.framework.model.user.User curUser = new cn.miracle.framework.model.user.User();
-        curUser.setId(11111L);
-        curUser.setLoginName("admin");
-        curUser.setPassword(passwordEncoder.encode("123"));
-        if (curUser == null) {
+        UserExt userExt = userService.findUserExtByLoginName(username);
+        if (userExt == null) {
             return null;
         }
-        // TODO
         List<String> permissionList = new ArrayList<>();
-        String curUserPassword = curUser.getPassword();
-        // TODO
-        JwtUser jwtUser = new JwtUser(username, curUserPassword, AuthorityUtils.commaSeparatedStringToAuthorityList(""));
-        // Avatar
-        jwtUser.setAvatar(curUser.getAvatar());
-        // Id
-        jwtUser.setId(curUser.getId());
+        List<Menu> permissionListToUse = userExt.getPermissionList();
+        // 处理权限标识
+        permissionListToUse.stream().map(Menu::getCode).forEach(permissionList::add);
+        String permissionString = StringUtils.join(permissionList, ",");
+
+        String curUserPassword = userExt.getPassword();
+        JwtUser jwtUser = new JwtUser(username, curUserPassword, AuthorityUtils.commaSeparatedStringToAuthorityList(permissionString));
+        jwtUser.setAvatar(userExt.getAvatar());
+        jwtUser.setId(userExt.getId());
         return jwtUser;
     }
 

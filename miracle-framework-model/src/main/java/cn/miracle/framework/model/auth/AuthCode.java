@@ -27,9 +27,9 @@ public enum AuthCode implements ResultCode {
     AUTH_ACCOUNT_NOT_EXISTS(false,23003,"账户不存在！"),
 
     /**
-     * 认证失败
+     * 密码错误
      */
-    AUTH_CREDENTIAL_ERROR(false,23004,"认证失败！");
+    AUTH_CREDENTIAL_ERROR(false,23004,"密码错误！");
 
     private boolean success;
 

@@ -8,6 +8,7 @@ import cn.miracle.framework.model.user.User;
 import cn.miracle.service.manage.auth.feign.TestFeignClient;
 import cn.miracle.service.manage.auth.properties.AuthProperties;
 import cn.miracle.service.manage.auth.service.AuthService;
+import cn.miracle.service.manage.auth.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -38,6 +39,9 @@ public class AuthController {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 登录
@@ -89,8 +93,8 @@ public class AuthController {
     }
 
     @GetMapping("/test1")
-    public Map test1() {
-        return testFeignClient.test1();
+    public Object test1() {
+        return userService.findUserExtByLoginName("admin1");
     }
 
     @GetMapping("/test2")

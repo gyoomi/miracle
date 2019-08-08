@@ -21,7 +21,7 @@ eureka:
     registerWithEureka: true #服务注册开关
     fetchRegistry: true #服务发现开关
     serviceUrl: #Eureka客户端与Eureka服务端进行交互的地址，多个中间用逗号分隔
-      defaultZone: ${EUREKA_SERVER:http://127.0.0.1:10001/eureka/,http://127.0.0.1:10001:10002/eureka/}
+      defaultZone: ${EUREKA_SERVER:http://127.0.0.1:10001/eureka/,http://127.0.0.1:10002/eureka/}
   instance:
     prefer-ip-address:  true  #将自己的ip地址注册到Eureka服务中
     ip-address: 127.0.0.1
@@ -36,7 +36,7 @@ ribbon:
 #------------------------------zuul-------------------------------------------
 zuul:
   # 添加host头部
-  add-host-header: true
+  #add-host-header: true
   routes:
     manage-user:
       path: /manage/user/**
@@ -53,5 +53,12 @@ zuul:
       serviceId: miracle-service-manage-order #指定服务id，从Eureka中找到服务的ip和端口
       strip-prefix: false
       sensitiveHeaders:
-
-
+    # auth service
+    manage-auth:  #路由名称，名称任意，保持所有路由名称唯一
+      path: /auth/**
+      serviceId: miracle-service-manage-auth #指定服务id，从Eureka中找到服务的ip和端口
+      strip-prefix: false
+      sensitiveHeaders:
+# login ignore url
+auth:
+  ignored-url-patterns: /auth/**,/manage/user/test/test1,/manage/user/test/test2

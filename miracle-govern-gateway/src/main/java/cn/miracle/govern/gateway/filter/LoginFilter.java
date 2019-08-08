@@ -8,8 +8,10 @@ import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +28,12 @@ public class LoginFilter extends ZuulFilter {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private AntPathMatcher antPathMatcher;
+
+    @Value("${auth.ignored-url-patterns}")
+    private String ignoredUrlPatterns;
+
     @Override
     public String filterType() {
         return "pre";
@@ -38,7 +46,17 @@ public class LoginFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        // TODO: dynamic filter url
+        if (StringUtils.isNotBlank(ignoredUrlPatterns)) {
+            HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
+            String requestURI = request.getRequestURI();
+            requestURI = StringUtils.substringAfter(requestURI, "/api");
+            String[] ignoredUrlArr = StringUtils.split(ignoredUrlPatterns, ",");
+            for (String url : ignoredUrlArr) {
+                if (antPathMatcher.match(url, requestURI)) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
@@ -79,4 +97,5 @@ public class LoginFilter extends ZuulFilter {
         }
         return StringUtils.substringAfter(authorization, "Bearer ");
     }
+
 }

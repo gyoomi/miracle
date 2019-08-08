@@ -56,7 +56,7 @@ feign:
     response:
       enabled: true #开启响应压缩
   hystrix:
-    enabled: true #开启Feign的熔断功能,(fallback is fruitful)
+    enabled: false #开启Feign的熔断功能,(fallback is fruitful)
 # ---encrypt---
 encrypt:
   key-store:

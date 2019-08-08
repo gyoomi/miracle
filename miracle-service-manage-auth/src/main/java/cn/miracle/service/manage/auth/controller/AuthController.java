@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -94,7 +95,10 @@ public class AuthController {
 
     @GetMapping("/test1")
     public Object test1() {
-        return userService.findUserExtByLoginName("admin1");
+        return new HashMap(){{
+           put("name", "authname");
+           put("age", 22);
+        }};
     }
 
     @GetMapping("/test2")

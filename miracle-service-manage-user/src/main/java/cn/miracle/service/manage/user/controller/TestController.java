@@ -1,11 +1,14 @@
 package cn.miracle.service.manage.user.controller;
 
+import cn.miracle.framework.common.lock.RedissonLock;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 类功能描述
@@ -17,6 +20,8 @@ import java.util.Map;
 @RequestMapping(value = "/manage/user/test")
 public class TestController {
 
+    private String lockKey = "test_lock_key";
+
     @GetMapping(value = "/test1")
     public Map test1() {
         return new HashMap(){{
@@ -26,10 +31,21 @@ public class TestController {
     }
 
     @GetMapping(value = "/test2")
-    public Map test2() {
-        return new HashMap(){{
-            put("name", "张三22222222");
-            put("age", 2333333);
-        }};
+    public void test2(String name) throws Exception {
+        new Thread(() -> {
+            RedissonLock.lock(lockKey, TimeUnit.MINUTES, 1);
+            System.out.println(LocalDateTime.now() + " " + name + "start......");
+            for (int i = 1; i < 11; i++) {
+                try {
+                    Thread.sleep(1000);
+                    System.out.println(LocalDateTime.now().toLocalTime() +" " + name +" " +i);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.out.println(LocalDateTime.now() + " " + name + "end......");
+            RedissonLock.unlock(lockKey);
+        }).start();
+        System.out.println("main do over");
     }
 }

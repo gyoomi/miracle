@@ -6,6 +6,8 @@
 
 package cn.miracle.framework.common.lock;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * 接口功能描述
  *
@@ -14,16 +16,36 @@ package cn.miracle.framework.common.lock;
  */
 public interface DistributedLock {
 
-    /**
-     * Get a lock
-     *
-     * @return
-     */
-    boolean lock();
 
     /**
-     * Release a existed lock
+     * Get a distributed lock for {@code key}
      *
+     * @param key
      */
-    void unlock();
+    void lock(String key);
+
+    /**
+     * Release a distributed lock for {@code key}
+     *
+     * @param key
+     */
+    void unlock(String key);
+
+    /**
+     * Get a distributed lock for {@code key} within {@code timeout} <br/>
+     * Default time unit is <tt>milliseconds</tt>
+     *
+     * @param lockKey
+     * @param timeout  must not be {@literal null}
+     */
+    void lock(String lockKey, int timeout);
+
+    /**
+     * Get a distributed lock for {@code key} within {@code timeout} at {@code unit}
+     *
+     * @param lockKey
+     * @param unit    must not be {@literal null}
+     * @param timeout must not be {@literal null}
+     */
+    void lock(String lockKey, TimeUnit unit , int timeout);
 }

@@ -1,5 +1,5 @@
 server:
-  port: 11001
+  port: 11002
 spring:
   application:
     name: miracle-service-manage-user
@@ -39,3 +39,12 @@ miracle:
   work:
     workerId: 1
     dataCenterId: 1
+# ---redisson---
+# 哨兵模式
+# redisson:
+#  master-name: mymaster
+#  password:
+#  sentinel-addresses: 10.47.91.83:26379,10.47.91.83:26380,10.47.91.83:26381
+redisson:
+  address: redis://127.0.0.1:6379
+  password:

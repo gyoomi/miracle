@@ -40,6 +40,16 @@ public enum CommonCode implements ResultCode {
     UNAUTHORISE(false,10002,"权限不足，无权操作！"),
 
     /**
+     * 缺失表单提交token
+     */
+    MISSING_FORM_TOKEN(false,10004,"缺失表单提交token!"),
+
+    /**
+     * token已使用，请勿重复提交！
+     */
+    NOT_EXIST_FORM_TOKEN(false,10005,"token已使用，请勿重复提交！"),
+
+    /**
      * 抱歉，系统繁忙，请稍后重试
      */
     SERVER_ERROR(false,99999,"抱歉，系统繁忙，请稍后重试！");

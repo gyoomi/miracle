@@ -1,5 +1,6 @@
 package cn.miracle.service.manage.user.controller;
 
+import cn.miracle.framework.common.form.token.FormToken;
 import cn.miracle.framework.common.lock.RedissonLock;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,5 +48,14 @@ public class TestController {
             RedissonLock.unlock(lockKey);
         }).start();
         System.out.println("main do over");
+    }
+
+    @GetMapping(value = "/save")
+    @FormToken
+    public String save(String test) {
+        System.out.println(LocalDateTime.now().toLocalDate());
+        System.out.println(LocalDateTime.now().toLocalTime());
+        System.out.println(LocalDateTime.now());
+        return "ok";
     }
 }

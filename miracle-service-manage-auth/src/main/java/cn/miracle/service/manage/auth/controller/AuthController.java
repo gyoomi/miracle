@@ -106,6 +106,13 @@ public class AuthController {
         return testFeignClient.test2();
     }
 
+    @GetMapping("/test3")
+    public String test3() {
+        stringRedisTemplate.opsForValue().set("test111", "zhangsan...");
+        stringRedisTemplate.opsForList().leftPush("testList", "element001");
+        return "ok";
+    }
+
     private String getJwtFromHeader(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
         if (StringUtils.isBlank(authorization)) {

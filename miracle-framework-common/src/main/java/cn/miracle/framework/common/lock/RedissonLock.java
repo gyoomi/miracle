@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class RedissonLock {
 
-    private static final Logger log = LoggerFactory.getLogger(RedissonLock.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RedissonLock.class);
 
     private static DistributedLock redissonLock;
 
@@ -28,7 +28,7 @@ public class RedissonLock {
      */
     public static void lock(String key) {
         redissonLock.lock(key);
-        log.info("分布式锁获取成功：{}", key);
+        LOGGER.info("分布式锁获取成功：{}", key);
     }
 
     /**
@@ -37,7 +37,7 @@ public class RedissonLock {
      * @see DistributedLock#unlock(String) 
      */
     public static void unlock(String key) {
-        log.info("释放分布式锁：{}", key);
+        LOGGER.info("释放分布式锁：{}", key);
         redissonLock.unlock(key);
     }
 
@@ -48,7 +48,7 @@ public class RedissonLock {
      */
     public static void lock(String key, int timeout) {
         redissonLock.lock(key, timeout);
-        log.info("分布式锁获取成功：{}", key);
+        LOGGER.info("分布式锁获取成功：{}", key);
     }
 
     /**
@@ -58,6 +58,6 @@ public class RedissonLock {
      */
     public static void lock(String key, TimeUnit unit , int timeout) {
         redissonLock.lock(key, unit, timeout);
-        log.info("分布式锁获取成功：{}", key);
+        LOGGER.info("分布式锁获取成功：{}", key);
     }
 }

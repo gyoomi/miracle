@@ -6,6 +6,7 @@ import cn.miracle.framework.common.lock.RedissonLock;
 import cn.miracle.framework.common.lock.RedissonProperties;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
+import org.redisson.config.ClusterServersConfig;
 import org.redisson.config.Config;
 import org.redisson.config.SentinelServersConfig;
 import org.redisson.config.SingleServerConfig;
@@ -56,6 +57,21 @@ public class RedissonAutoConfiguration {
                 .setSlaveConnectionPoolSize(redssionProperties.getSlaveConnectionPoolSize());
         if(redssionProperties.getPassword() != null && !"".equals(redssionProperties.getPassword())) {
             sentinelServersConfig.setPassword(redssionProperties.getPassword());
+        }
+        return Redisson.create(config);
+    }
+
+    @Bean
+    @ConditionalOnProperty(value = "redisson.client-name")
+    public RedissonClient redissonCluster() {
+        Config config = new Config();
+        ClusterServersConfig clusterServersConfig = config.useClusterServers()
+                .setClientName(redssionProperties.getClientName())
+                .addNodeAddress(redssionProperties.getNodeAddresses().split(","))
+                .setMasterConnectionPoolSize(redssionProperties.getMasterConnectionPoolSize())
+                .setSlaveConnectionPoolSize(redssionProperties.getSlaveConnectionPoolSize());
+        if(redssionProperties.getPassword() != null && !"".equals(redssionProperties.getPassword())) {
+            clusterServersConfig.setPassword(redssionProperties.getPassword());
         }
         return Redisson.create(config);
     }

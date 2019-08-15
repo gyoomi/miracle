@@ -29,6 +29,10 @@ public class RedissonProperties {
 
     private String masterName;
 
+    private String clientName;
+
+    private String nodeAddresses;
+
     public int getTimeout() {
         return timeout;
     }
@@ -99,5 +103,21 @@ public class RedissonProperties {
 
     public void setMasterName(String masterName) {
         this.masterName = masterName;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public String getNodeAddresses() {
+        return nodeAddresses;
+    }
+
+    public void setNodeAddresses(String nodeAddresses) {
+        this.nodeAddresses = nodeAddresses;
     }
 }

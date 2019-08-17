@@ -19,10 +19,32 @@ spring:
       minEvictableIdleTimeMillis: 300000  #连接在连接池的最小生存时间（毫秒）
   #---rabbitmq---
   rabbitmq:
-    host: localhost
-    port: 5672
     username: guest
     password: guest
+    addresses: localhost:5672
+    #开启发送失败返回
+    publisher-returns: true
+    #开启发送确认
+    publisher-confirms: true
+    listener:
+      simple:
+        #指定最小的消费者数量
+        concurrency: 1
+        max-concurrency: 2
+        acknowledge-mode: manual
+        retry:
+          enabled: true
+          max-attempts: 2
+          initial-interval: 2000
+      direct:
+      #开启ack
+        acknowledge-mode: manual
+        retry:
+          enabled: true
+          max-attempts: 2
+    #支持消息的确认与返回
+    template:
+      mandatory: true
 eureka:
   client:
     register-with-eureka: true

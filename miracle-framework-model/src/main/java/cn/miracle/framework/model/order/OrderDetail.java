@@ -30,6 +30,11 @@ public class OrderDetail {
     private Long id;
 
     /**
+     * 订单id
+     */
+    private Long orderId;
+
+    /**
      * 商品id
      */
     private Long itemId;

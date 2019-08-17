@@ -11,6 +11,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * 类功能描述
@@ -21,7 +22,7 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "order")
-public class Order {
+public class Order implements Serializable {
 
 
     /**

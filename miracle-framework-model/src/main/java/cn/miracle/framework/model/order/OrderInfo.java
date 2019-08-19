@@ -11,6 +11,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**
@@ -21,8 +22,8 @@ import java.io.Serializable;
  */
 @Data
 @Entity
-@Table(name = "order")
-public class Order implements Serializable {
+@Table(name = "orderInfo")
+public class OrderInfo implements Serializable {
 
 
     /**
@@ -30,6 +31,11 @@ public class Order implements Serializable {
      */
     @Id
     private Long id;
+
+    /**
+     * 用户id
+     */
+    private Long userId;
 
     /**
      * 订单编号
@@ -62,5 +68,11 @@ public class Order implements Serializable {
      *   60 - 已完成
      */
     private Integer orderStatus;
+
+    /**
+     * broker message id
+     */
+    @Transient
+    private String messageId;
 
 }

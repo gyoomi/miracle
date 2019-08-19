@@ -1,6 +1,6 @@
 package cn.miracle.service.order.mq;
 
-import cn.miracle.framework.model.order.Order;
+import cn.miracle.framework.model.order.OrderInfo;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -19,15 +19,15 @@ import java.util.Objects;
 @Component
 public class OrderListener {
 
-    @RabbitListener(queues = "delay_queue")
-    public void listenOrderCancel(Channel channel, Message message, Order order) {
+    @RabbitListener(queues = "order_delay_queue")
+    public void listenOrderCancel(Channel channel, Message message, OrderInfo order) {
         if (Objects.equals(10, order.getOrderStatus())) {
             // 设置订单为超时过期，并存入数据库
             System.out.println(LocalDateTime.now() + "  订单编号: " + order.getOrderNo() + " 已超时支付，已自动取消！");
         }
         long deliveryTag = message.getMessageProperties().getDeliveryTag();
         try {
-            channel.basicAck(deliveryTag, true);
+            channel.basicAck(deliveryTag, false);
         } catch (IOException e) {
             e.printStackTrace();
         }

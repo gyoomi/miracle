@@ -1,5 +1,6 @@
 package cn.miracle.service.order.config;
 
+import cn.miracle.service.order.constant.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
@@ -11,11 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
- * 类功能描述
+ * mq
  *
  * @author Leon
  * @version 2019/8/17 15:17
@@ -25,6 +29,9 @@ public class RabbitmqConfig {
 
     @Autowired
     private RabbitProperties rabbitProperties;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Bean
     public ConnectionFactory connectionFactory() {
@@ -49,23 +56,35 @@ public class RabbitmqConfig {
     }
 
 
-    public static class ConfirmCallbackListener implements RabbitTemplate.ConfirmCallback {
+    public class ConfirmCallbackListener implements RabbitTemplate.ConfirmCallback {
 
-        private static final Logger LOGGER = LoggerFactory.getLogger(ConfirmCallbackListener.class);
+        private final Logger LOGGER = LoggerFactory.getLogger(ConfirmCallbackListener.class);
 
         @Override
         public void confirm(CorrelationData correlationData, boolean ack, String cause) {
-            LOGGER.info("----------------start-------------------");
-            LOGGER.info("CorrelationData -> {}", correlationData);
-            LOGGER.info("ack -> {}", ack);
-            LOGGER.info("cause -> {}", cause);
-            LOGGER.info("----------------end-------------------");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("----------------start-------------------");
+                LOGGER.debug("CorrelationData -> {}", correlationData);
+                LOGGER.debug("ack -> {}", ack);
+                LOGGER.debug("cause -> {}", cause);
+                LOGGER.debug("----------------end-------------------");
+            }
+            String messageId = correlationData.getId();
+            if (ack) {
+                String sql = " UPDATE broker_message SET status = ?, update_date = ? WHERE id = ? ";
+                jdbcTemplate.update(sql, Constants.ORDER_SEND_SUCCESS, new Date(), messageId);
+                LOGGER.info("Send message -> {} to mq at -> {} Successfully", messageId, LocalDateTime.now());
+            } else {
+                String sql = " UPDATE broker_message SET status = ?, update_date = ? WHERE id = ? ";
+                jdbcTemplate.update(sql, Constants.ORDER_SEND_FAILURE, new Date(), messageId);
+                LOGGER.warn("Send message -> {} to mq at -> {} unsuccessfully, please try again later ", messageId, LocalDateTime.now());
+            }
         }
     }
 
-    public static class ReturnCallbackListener implements RabbitTemplate.ReturnCallback {
+    public class ReturnCallbackListener implements RabbitTemplate.ReturnCallback {
 
-        private static final Logger LOGGER = LoggerFactory.getLogger(ReturnCallbackListener.class);
+        private final Logger LOGGER = LoggerFactory.getLogger(ReturnCallbackListener.class);
 
         @Override
         public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
@@ -90,7 +109,7 @@ public class RabbitmqConfig {
         args.put("x-delayed-type", "direct");
         // type must be 'x-delayed-message'
         // CustomExchange is must
-        return new CustomExchange("delay_exchange", "x-delayed-message", true, false, args);
+        return new CustomExchange("order_delay_exchange", "x-delayed-message", true, false, args);
     }
 
     /**
@@ -100,7 +119,7 @@ public class RabbitmqConfig {
      */
     @Bean
     public Queue delayQueue() {
-        return new Queue("delay_queue", true);
+        return new Queue("order_delay_queue", true);
     }
 
     /**
@@ -110,7 +129,7 @@ public class RabbitmqConfig {
      */
     @Bean
     public Binding delayBinding() {
-        return BindingBuilder.bind(delayQueue()).to(delayExchange()).with("delay_key").noargs();
+        return BindingBuilder.bind(delayQueue()).to(delayExchange()).with("order_delay_key").noargs();
     }
 
 

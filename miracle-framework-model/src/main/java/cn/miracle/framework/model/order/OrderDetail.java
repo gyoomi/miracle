@@ -42,11 +42,16 @@ public class OrderDetail {
     /**
      * 商品名
      */
-    private String name;
+    private String itemName;
 
     /**
      * 数量
      */
-    private Integer num;
+    private Integer itemNum;
+
+    /**
+     * 单价
+     */
+    private Double itemPrice;
 
 }

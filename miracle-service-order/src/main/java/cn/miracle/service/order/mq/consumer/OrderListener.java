@@ -1,4 +1,4 @@
-package cn.miracle.service.order.mq;
+package cn.miracle.service.order.mq.consumer;
 
 import cn.miracle.framework.model.order.OrderInfo;
 import com.rabbitmq.client.Channel;
@@ -29,6 +29,7 @@ public class OrderListener {
         try {
             channel.basicAck(deliveryTag, false);
         } catch (IOException e) {
+            //channel.basicNack(deliveryTag, false, false);
             e.printStackTrace();
         }
     }

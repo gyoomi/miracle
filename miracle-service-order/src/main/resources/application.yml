@@ -42,12 +42,6 @@ spring:
           enabled: true
           max-attempts: 2
           initial-interval: 2000
-      direct:
-      #开启ack
-        acknowledge-mode: manual
-        retry:
-          enabled: true
-          max-attempts: 2
     #支持消息的确认与返回
     template:
       mandatory: true

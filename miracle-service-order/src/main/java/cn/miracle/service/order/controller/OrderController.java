@@ -1,5 +1,6 @@
 package cn.miracle.service.order.controller;
 
+import cn.miracle.framework.common.flowlimit.FlowLimiter;
 import cn.miracle.framework.common.util.IdWorker;
 import cn.miracle.framework.model.order.BrokerMessage;
 import cn.miracle.framework.model.order.OrderInfo;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.Random;
 
 /**
  * 类功能描述
@@ -71,5 +73,11 @@ public class OrderController {
         // send message
         orderSender.sendMessage(order, brokerMessage);
         return "下单成功！";
+    }
+
+    @GetMapping(value = "/test")
+    @FlowLimiter(permitsPerSecond = 2, timeout = 100)
+    public String test() {
+        return String.valueOf(new Random().nextInt());
     }
 }

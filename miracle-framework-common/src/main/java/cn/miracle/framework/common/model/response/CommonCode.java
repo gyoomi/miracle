@@ -50,6 +50,11 @@ public enum CommonCode implements ResultCode {
     NOT_EXIST_FORM_TOKEN(false,10005,"token已使用，请勿重复提交！"),
 
     /**
+     * 请求频繁，请稍后重试！
+     */
+    REQUEST_ERROR_FREQUENT(false,10006,"请求频繁，请稍后重试！"),
+
+    /**
      * 抱歉，系统繁忙，请稍后重试
      */
     SERVER_ERROR(false,99999,"抱歉，系统繁忙，请稍后重试！");

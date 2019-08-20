@@ -1,5 +1,7 @@
 package cn.miracle.framework.common.flowlimit;
 
+import cn.miracle.framework.common.exception.ExceptionBuilder;
+import cn.miracle.framework.common.model.response.CommonCode;
 import com.google.common.util.concurrent.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -36,7 +38,6 @@ public class FlowLimiterAspect {
     @Around(value = "pointCut(flowLimiter)", argNames = "pjp,flowLimiter")
     public Object flowLimiter(ProceedingJoinPoint pjp, FlowLimiter flowLimiter) throws Throwable {
         String requestUri = getRequestUri();
-        // 保证同个请求有唯一的令牌桶
         RateLimiter rateLimiter;
         if (rateMap.containsKey(requestUri)) {
             rateLimiter = rateMap.get(requestUri);
@@ -49,7 +50,8 @@ public class FlowLimiterAspect {
         // 获取令牌桶中的令牌，如果自规定时间内，没有获取到令牌，则服务降级
         boolean tryAcquire = rateLimiter.tryAcquire(timeOut, TimeUnit.MILLISECONDS);
         if (!tryAcquire) {
-            fallback();
+            // fallback();
+            ExceptionBuilder.build(CommonCode.REQUEST_ERROR_FREQUENT);
             return null;
         }
         return pjp.proceed();
@@ -64,7 +66,7 @@ public class FlowLimiterAspect {
         String requestURI = attributes.getRequest().getRequestURI();
         response.setHeader("Content-Type", "text/html;charset=utf-8");
         try (PrintWriter writer = response.getWriter()) {
-            log.info("FlowLimiter url:{}", requestURI);
+            log.warn("FlowLimiter url : {} 请求频繁！ ", requestURI);
             writer.println("服务繁忙！请稍后重试！");
         } catch (IOException e) {
             log.error("FlowLimiter io error:{}", e.getMessage());

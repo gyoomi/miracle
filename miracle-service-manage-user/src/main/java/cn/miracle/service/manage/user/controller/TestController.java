@@ -1,5 +1,7 @@
 package cn.miracle.service.manage.user.controller;
 
+import cn.miracle.framework.common.flowlimit.redisson.LimiterStrategy;
+import cn.miracle.framework.common.flowlimit.redisson.RedissonFlowLimiter;
 import cn.miracle.framework.common.form.token.FormToken;
 import cn.miracle.framework.common.lock.RedissonLock;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,5 +59,14 @@ public class TestController {
         System.out.println(LocalDateTime.now().toLocalTime());
         System.out.println(LocalDateTime.now());
         return "ok";
+    }
+
+    @GetMapping(value = "/limit")
+    @RedissonFlowLimiter(limiterStrategy = LimiterStrategy.General, permits = 3, timeUnit = TimeUnit.MINUTES)
+    public String limit() {
+        System.out.println(LocalDateTime.now().toLocalDate());
+        System.out.println(LocalDateTime.now().toLocalTime());
+        System.out.println(LocalDateTime.now());
+        return "ok limit";
     }
 }

@@ -23,13 +23,13 @@ eureka:
     fetch-registry: true
     registry-fetch-interval-seconds: 30
     service_url:
-        defaultZone: ${EUREKA_SERVER:http://127.0.0.1:10001/eureka,http://127.0.0.1:10002/eureka}
-  server:
-    enable-self-preservation: false
-    eviction-interval-timer-in-ms: 30000
+        defaultZone: ${EUREKA_SERVER:http://admin:12345@127.0.0.1:10001/eureka,http://admin:12345@127.0.0.1:10002/eureka}
   instance:
     prefer-ip-address: true
-    hostname: localhost
+    hostname: 127.0.0.1
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port} #指定实例id
+    lease-renewal-interval-in-seconds: 10 #Client发给Server的心跳频率
+    lease-expiration-duration-in-seconds: 10 #Server收到上一次心跳时间之后，等待下一次心跳的超时时间。如果在时间内没有收到，则进行服务剔除
 #---redisson---
 #集群模式
 #redisson:
@@ -38,4 +38,4 @@ eureka:
 #  node-addresses: redis://192.168.1.103:7000,redis://192.168.1.103:7001,redis://192.168.1.103:7002,redis://192.168.1.103:7003,redis://192.168.1.103:7004,redis://192.168.1.103:7005
 redisson:
   address: redis://106.12.150.85:6789
-  password:
+  password: ai_redis

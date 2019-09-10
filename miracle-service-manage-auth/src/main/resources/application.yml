@@ -5,25 +5,25 @@ server:
 spring:
   application:
     name: miracle-service-manage-auth
-#  redis:
-#    database: 0
-#    host: 127.0.0.1
-#    port: 6379
-#    password:
-#    jedis:
-#      pool:
-#        max-active: 8
-#        max-idle: 8
-#        min-idle: 0
   redis:
-    cluster:
-      nodes:
-        - 192.168.1.103:7000
-        - 192.168.1.103:7001
-        - 192.168.1.103:7002
-        - 192.168.1.103:7003
-        - 192.168.1.103:7004
-        - 192.168.1.103:7005
+    database: 0
+    host: 106.12.150.85
+    port: 6789
+    password: ai_redis
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+#  redis:
+#    cluster:
+#      nodes:
+#        - 192.168.1.103:7000
+#        - 192.168.1.103:7001
+#        - 192.168.1.103:7002
+#        - 192.168.1.103:7003
+#        - 192.168.1.103:7004
+#        - 192.168.1.103:7005
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/miracle_user?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
@@ -96,5 +96,5 @@ miracle:
 #  node-addresses: redis://192.168.1.103:7000,redis://192.168.1.103:7001,redis://192.168.1.103:7002,redis://192.168.1.103:7003,redis://192.168.1.103:7004,redis://192.168.1.103:7005
 redisson:
   address: redis://106.12.150.85:6789
-  password:
+  password: ai_redis
 

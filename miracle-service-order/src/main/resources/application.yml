@@ -60,3 +60,12 @@ miracle:
   work:
     workerId: 1
     dataCenterId: 2
+#---redisson---
+#集群模式
+#redisson:
+#  client-name: myclient
+#  password:
+#  node-addresses: redis://192.168.1.103:7000,redis://192.168.1.103:7001,redis://192.168.1.103:7002,redis://192.168.1.103:7003,redis://192.168.1.103:7004,redis://192.168.1.103:7005
+redisson:
+  address: redis://106.12.150.85:6789
+  password:

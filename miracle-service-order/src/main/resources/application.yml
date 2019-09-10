@@ -51,7 +51,7 @@ eureka:
     fetch-registry: true
     registry-fetch-interval-seconds: 30
     service-url:
-      defaultZone: ${EUREKA_SERVER:http://admin:123451231@127.0.0.1:11001/eureka,http://admin:12345132123@127.0.0.1:11002/eureka}
+      defaultZone: ${EUREKA_SERVER:http://admin:12345@127.0.0.1:10001/eureka,http://admin:12345@127.0.0.1:10002/eureka}
   instance:
     prefer-ip-address: true
     hostname: 127.0.0.1

@@ -27,7 +27,6 @@
         <module>miracle-service-item</module>
         <module>miracle-service-order</module>
         <module>miracle-service-pay</module>
-        <module>miracle-test</module>
     </modules>
 
     <properties>

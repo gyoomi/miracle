@@ -25,7 +25,7 @@ eureka:
   instance:
     prefer-ip-address:  true  #将自己的ip地址注册到Eureka服务中
     ip-address: 127.0.0.1
-    instance-id: ${spring.application.name}:${server.port} #指定实例id
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port} #指定实例id
 #------------------------------ribbon-------------------------------------------
 ribbon:
   MaxAutoRetries: 2 #最大重试次数，当Eureka中可以找到服务，但是服务连不上时将会重试，如果eureka中找不到服务则直接走断路器

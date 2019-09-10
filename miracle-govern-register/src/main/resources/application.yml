@@ -1,5 +1,5 @@
 server:
-  port: ${PROT:10001}
+  port: ${PROT:10002}
 spring:
   application:
     name: miracle-govern-register
@@ -13,11 +13,11 @@ eureka:
     fetch-registry: false
     registry-fetch-interval-seconds: 30
     service_url:
-        defaultZone: ${EUREKA_SERVER:http://admin:12345@127.0.0.1:10002/eureka}
+        defaultZone: ${EUREKA_SERVER:http://admin:12345@127.0.0.1:10001/eureka}
   server:
     enable-self-preservation: false
-    eviction-interval-timer-in-ms: 30000
+    eviction-interval-timer-in-ms: 15000 # 开发环境短（5到20秒都可以），生产环境时间长，推荐使用默认的60秒
   instance:
     prefer-ip-address: true
     hostname: localhost
-
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port} #指定实例id

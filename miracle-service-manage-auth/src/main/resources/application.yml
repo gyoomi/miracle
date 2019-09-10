@@ -48,6 +48,8 @@ spring:
 # ---eureka---
 eureka:
   client:
+    healthcheck:
+      enabled: true #开启服务检测
     registerWithEureka: true #服务注册开关
     fetchRegistry: true #服务发现开关
     serviceUrl: #Eureka客户端与Eureka服务端进行交互的地址，多个中间用逗号分隔
@@ -55,7 +57,9 @@ eureka:
   instance:
     prefer-ip-address:  true  #将自己的ip地址注册到Eureka服务中
     ip-address: ${IP_ADDRESS:127.0.0.1}
-    instance-id: ${spring.application.name}:${server.port} #指定实例id
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port} #指定实例id
+    lease-renewal-interval-in-seconds: 10 #Client发给Server的心跳频率
+    lease-expiration-duration-in-seconds: 10 #Server收到上一次心跳时间之后，等待下一次心跳的超时时间。如果在时间内没有收到，则进行服务剔除
 # ---feign---
 feign:
   compression:

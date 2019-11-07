@@ -49,5 +49,12 @@
             <artifactId>miracle-framework-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!-- zuul rateLimit依赖 -->
+        <dependency>
+            <groupId>com.marcosbarbero.cloud</groupId>
+            <artifactId>spring-cloud-zuul-ratelimit</artifactId>
+            <version>LATEST</version>
+        </dependency>
     </dependencies>
 </project>
